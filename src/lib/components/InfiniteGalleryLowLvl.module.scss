@@ -1,0 +1,37 @@
+.list-outer {
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.list-inner {
+  position: relative;
+}
+
+.row {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+.image {
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.image-placeholder {
+  display: inline-block;
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-color: #F5F5F5;
+  background-image: url("/images/placeholder-image.png");
+}
+
+.content-placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+
+  height: 100%;
+}

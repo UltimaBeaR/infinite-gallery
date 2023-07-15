@@ -1,0 +1,71 @@
+{
+  "version": "0.0.1",
+  "name": "infinite-gallery-react",
+  "description": "Virtualized scrollable gallery component for react",
+  "author": "UltimaBeaR",
+  "license": "MIT",
+  "homepage": "https://github.com/UltimaBeaR/infinite-gallery#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/UltimaBeaR/infinite-gallery.git"
+  },
+  "bugs": {
+    "url": "https://github.com/UltimaBeaR/infinite-gallery/issues"
+  },
+  "keywords": [
+    "react",
+    "component",
+    "masonry",
+    "gallery",
+    "infinite",
+    "scroll",
+    "virtual",
+    "virtualized"
+  ],
+  "type": "module",
+  "files": [
+    "dist"
+  ],
+  "main": "./dist/index.umd.js",
+  "module": "./dist/index.es.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
+    }
+  },
+  "types": "./dist/index.d.ts",
+  "dependencies": {
+    "@tanstack/react-virtual": "3.0.0-beta.54",
+    "lodash-es": "4.17.21",
+    "normalize.css": "8.0.1",
+    "react-query": "3.39.3",
+    "simplebar-react": "3.2.4",
+    "use-resize-observer": "9.1.0"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/lodash-es": "4.17.8",
+    "@types/node": "20.4.2",
+    "@types/react": "18.2.15",
+    "@types/react-dom": "18.2.7",
+    "@typescript-eslint/eslint-plugin": "6.0.0",
+    "@typescript-eslint/parser": "6.0.0",
+    "@vitejs/plugin-react": "4.0.3",
+    "eslint": "8.45.0",
+    "eslint-plugin-react-hooks": "4.6.0",
+    "eslint-plugin-react-refresh": "0.4.3",
+    "sass": "1.63.6",
+    "typescript": "5.1.6",
+    "vite": "4.4.4",
+    "vite-plugin-dts": "3.3.0"
+  },
+  "scripts": {
+    "start": "npm run dev",
+    "dev": "vite",
+    "build": "vite build"
+  }
+}

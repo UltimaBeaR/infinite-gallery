@@ -1,6 +1,6 @@
 {
   "version": "0.0.1",
-  "name": "infinite-gallery-react",
+  "name": "@ultimabear/infinite-gallery-react",
   "description": "Virtualized scrollable gallery component for react",
   "author": "UltimaBeaR",
   "license": "MIT",
@@ -26,15 +26,16 @@
   "files": [
     "dist"
   ],
-  "main": "./dist/index.umd.js",
-  "module": "./dist/index.es.js",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "types": "dist/index.d.ts",
   "exports": {
     ".": {
       "import": "./dist/index.es.js",
-      "require": "./dist/index.umd.js"
+      "require": "./dist/index.umd.js",
+      "types": "./dist/index.d.ts"
     }
   },
-  "types": "./dist/index.d.ts",
   "dependencies": {
     "@tanstack/react-virtual": "3.0.0-beta.54",
     "lodash-es": "4.17.21",

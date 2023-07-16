@@ -1,5 +1,4 @@
 import { type Photo } from "@/lib/components/InfiniteGalleryLowLvl";
-// import { type Photo } from "@ultimabear/infinite-gallery-react";
 
 export const testData: Photo[] = [
   {

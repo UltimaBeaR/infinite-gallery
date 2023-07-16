@@ -1,5 +1,5 @@
 import { InfiniteGallery } from '@/lib/components/InfiniteGallery'
-import { type PhotosChunk } from '@/lib/components/InfiniteGalleryLowLvl';
+import { type PhotosChunk } from '@/lib/components/InfiniteGallery/components/Main';
 import { testData } from './testData';
 
 function App() {

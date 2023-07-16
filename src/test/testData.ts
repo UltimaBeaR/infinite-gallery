@@ -1,4 +1,4 @@
-import { type Photo } from "@/lib/components/InfiniteGalleryLowLvl";
+import { type Photo } from "@/lib/components/InfiniteGallery/components/Main";
 
 export const testData: Photo[] = [
   {

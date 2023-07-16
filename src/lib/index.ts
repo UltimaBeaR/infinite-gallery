@@ -1,5 +1,4 @@
-import { InfiniteGallery, type InfiniteGalleryProps } from "@/lib/components/InfiniteGallery";
-import type { PhotosChunk, Photo } from "@/lib/components/InfiniteGalleryLowLvl";
+import { InfiniteGallery, type InfiniteGalleryProps, type PhotosChunk, type Photo } from "./components/InfiniteGallery";
 
 export { InfiniteGallery, type InfiniteGalleryProps, type PhotosChunk, type Photo };
 

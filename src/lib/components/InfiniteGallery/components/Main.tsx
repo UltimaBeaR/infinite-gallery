@@ -10,44 +10,12 @@ import { useDebounced } from '@/lib/hooks/useDebounced';
 import SimpleBar from "simplebar-react";
 import 'simplebar-react/dist/simplebar.min.css';
 
-import cl from './InfiniteGalleryLowLvl.module.scss';
+import cl from '../common.module.scss';
+import type { Photo, PhotosChunk } from '../photosChunk';
+import { Inner } from './Inner';
+import type { PhotoLayoutRow } from '../photoLayoutRow';
 
-// TODO: Нужно сделать чтобы при наведении мышки - фотка на которую навелись рисовалась как бы приподнятой над остальными (выходит на передний план, с плавной анимацией)
-// (кст. при открытии попапа с фуллскрин фоткой тоже можно какую то анимацию замутить транслейта из мелкой фотки в большую. И в большом просмотрщике, пока грузится большая фотка, можно показывать маленькую)
-// - так вот она когда приподнимается - она рисуется всегда необрезанной, даже если мой лейаут ее обрезал. Но т.к. она приподнимается над остальными - то ее видно.
-// мышка при этом при наведении должна игнорировать приподнятую фотку а наводиться именно на бэкграунд, чтобы не было такого что при наведении на фотку которую перекрыла эта поднявшаяся нужно было
-// обходить мышкой эту поднятую фотку чтобы выбрать другую.
-//
-// Также должна быть возможность на фотках ставить "лайки" (не в вк а локально в своей проге) чтобы они вперед выносились в списке при следующем просмотре фоток.
-// так что думаю тут нужно вообще вынести наружу из этого компонента рендер-код для отдельной картинки. Через children возможно сделать
-
-
-// TODO: нужно подвязать размерности (width) на систему брейкпоинтов.
-// изначально в компонент передавать настройки брейкпоинтов, тогда при построении layout-а,
-// будет сразу на все эти брейкпоинты расчитываться разметка галереи и тогда при изменении ширины
-// будут аплаится размерности из соответствущего массива с брейкпоинтами.
-// То есть на данный момент есть только один массив - layoutRows, а будет их несколько на каждый брейкпоинт возможный.
-// Тогда при изменении размерностей не надо будет пересчитывать в этот момент огромный список фоток потенциальный - а просто переключается
-// массив используемый с размерностями + делается что то типа "перейти по скроллу к элементу номер такому то" - чтобы сохранить положение фотки внутри скролла.
-// можно сохранять оффсет фотки (1ой например) которая находится в видимости вьюпорта и считать % этого оффсета отностиельно высоты вьюпорта. И после изменения брейкпоинта
-// переходить на такие же параметры - ту же фотку делать 1ой во вьюпорте и двигать на тот же %.
-
-export interface Photo {
-  urlSmall: string,
-  widthSmall: number,
-  heightSmall: number,
-
-  urlLarge: string,
-  widthLarge: number,
-  heightLarge: number
-}
-
-export interface PhotosChunk {
-  photos: Photo[],
-  totalCount: number
-}
-
-export type InfiniteGalleryLowLvlProps = {
+export type MainProps = {
   getNextPhotosChunk(offset: number, limit: number): Promise<PhotosChunk>;
 
   width: number;
@@ -64,7 +32,7 @@ export type InfiniteGalleryLowLvlProps = {
   paddingBottom?: number;
 };
 
-export function InfiniteGalleryLowLvl(props: InfiniteGalleryLowLvlProps) {
+export function Main(props: MainProps) {
   const {
     getNextPhotosChunk,
 
@@ -98,7 +66,7 @@ export function InfiniteGalleryLowLvl(props: InfiniteGalleryLowLvlProps) {
 
   const [isLayoutRebuilding, setIsLayoutRebuilding] = useState(false);
 
-  const parentRef = useRef<HTMLElement>(null);
+  const parentRef = useRef<HTMLDivElement>(null);
 
   const [uniqueQueryKey] = useState(uniqueId('photo-gallery-'));
 
@@ -284,65 +252,19 @@ export function InfiniteGalleryLowLvl(props: InfiniteGalleryLowLvlProps) {
       className={cl['list-outer']}
       style={{ maxHeight: `${maxHeight}px` }}
     >
-      <div
-        className={cl['list-inner']}
-        style={{ height: `${rowVirtualizer.getTotalSize()}px`, marginLeft: `${paddingLeft}px`, marginTop: `${paddingTop}px` }}
-      >
-        {
-          virtualItems.map(virtualRow => {
-            const layoutRow = layoutRows[virtualRow.index];
-
-            const photoElements = layoutRow.items.map((item, photoIdx) => {
-              return (
-                <div
-                  key={photoIdx}
-                  className={cl['image-placeholder']}
-                  style={{
-                    width: item.width, height: layoutRow.height,
-                    marginRight: photoIdx < layoutRow.items.length - 1
-                      ? `${gap}px`
-                      : undefined
-                  }}
-                >
-                  <img
-                    className={cl.image}
-                    src={item.url}
-                    width={item.width} height={layoutRow.height}
-                    alt="Фото"
-                  />
-                </div>
-              );
-            });
-
-            return (
-              <div
-                key={virtualRow.index}
-                className={cl['row']}
-                style={{
-                  height: `${virtualRow.size}px`,
-                  transform: `translateY(${virtualRow.start}px)`
-                }}
-              >
-                {photoElements}
-              </div>
-            );
-          })
-        }
-      </div>
-      {isLoading && <div>Загрузка дополнительных фоток...</div>}
-      {isAllLoaded && <div style={{ height: paddingBottom }} />}
+      {/* <div ref={parentRef} className={cl['list-outer']} style={{ willChange: 'transform', maxHeight: `${maxHeight}px` }}> */}
+        <Inner
+          height={rowVirtualizer.getTotalSize()}
+          virtualItems={virtualItems}
+          layoutRows={layoutRows}
+          paddingLeft={paddingLeft} paddingTop={paddingTop} paddingBottom={paddingBottom}
+          gap={gap}
+          isLoading={isLoading}
+          isAllLoaded={isAllLoaded}
+        />
+      {/* </div> */}
     </SimpleBar>
   );
-}
-
-interface PhotoLayoutRowItem {
-  width: number,
-  url: string
-}
-
-interface PhotoLayoutRow {
-  items: PhotoLayoutRowItem[],
-  height: number
 }
 
 function checkIfFirstPhotoFitsBetter(

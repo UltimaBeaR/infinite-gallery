@@ -4,6 +4,8 @@ import App from './App.tsx'
 
 import 'normalize.css';
 
+// import '@ultimabear/infinite-gallery-react/dist/style.css';
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />

@@ -2,7 +2,7 @@
   "version": "0.0.1",
   "name": "@ultimabear/infinite-gallery-react",
   "description": "Virtualized scrollable gallery component for react",
-  "author": "UltimaBeaR",
+  "author": "ultimabear <thebear@yandex.ru>",
   "license": "MIT",
   "homepage": "https://github.com/UltimaBeaR/infinite-gallery#readme",
   "repository": {
@@ -34,7 +34,8 @@
       "import": "./dist/index.es.js",
       "require": "./dist/index.umd.js",
       "types": "./dist/index.d.ts"
-    }
+    },
+    "./dist/style.css": "./dist/style.css"
   },
   "dependencies": {
     "@tanstack/react-virtual": "3.0.0-beta.54",

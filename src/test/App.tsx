@@ -1,7 +1,7 @@
 import { InfiniteGallery } from '@/lib/components/InfiniteGallery'
 import { type PhotosChunk } from '@/lib/components/InfiniteGalleryLowLvl';
-//import { InfiniteGallery } from '@ultimabear/infinite-gallery-react'
-//import { type PhotosChunk } from '@ultimabear/infinite-gallery-react';
+// import { InfiniteGallery } from '@ultimabear/infinite-gallery-react'
+// import { type PhotosChunk } from '@ultimabear/infinite-gallery-react';
 import { testData } from './testData';
 
 function App() {

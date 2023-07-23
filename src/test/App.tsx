@@ -16,7 +16,8 @@ function App() {
     <FullScreenTestWrapper>
       <InfiniteGallery
         getNextPhotosChunk={getNextPhotosChunk}
-        paddingLeft={12} paddingRight={12} paddingTop={12} paddingBottom={12}
+        paddingLeft={2} paddingRight={2} paddingTop={2} paddingBottom={2}
+        gap={10}
       />
     </FullScreenTestWrapper>
   );

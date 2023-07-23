@@ -19,6 +19,8 @@ export type MainProps = {
   getNextPhotosChunk(offset: number, limit: number): Promise<PhotosChunk>;
 
   width: number;
+  reservedScrollbarWidth?: number;
+
   maxHeight: number;
 
   minRowHeight?: number;
@@ -36,7 +38,6 @@ export function Main(props: MainProps) {
   const {
     getNextPhotosChunk,
 
-    width,
     maxHeight,
 
     minRowHeight = 200,
@@ -49,6 +50,25 @@ export function Main(props: MainProps) {
     paddingTop = 0,
     paddingBottom = 0
   } = props;
+
+  let { reservedScrollbarWidth, width } = props;
+
+  if (reservedScrollbarWidth === undefined) {
+    if (measuredScrollbarWidth === undefined) {
+      measuredScrollbarWidth = measureScrollbarWidth();
+    }
+
+    reservedScrollbarWidth = measuredScrollbarWidth;
+  }
+
+  // TODO: временно так, потом надо найти где это правильнее вычесть.
+  // убираем ширину скролла если он резервируется, чтобы под остаток видимой части расчитывался лэйаут
+  // также нужно предусмотреть что в режиме с simplebar вообще не используется резервирование это, т.к. там скроллбар рисуется сверху контента оверлеем.
+  // думаю что можно снаружи передавать враппер под скролл и вместе с ним также указывать настройки про скролл - сколько резервировать под скролл (или не указывать тогда автоматом меряет)
+  // и нужно ли вообще это резерировать. Ну либо 0 - если не надо можно передать (как раз случай для simplebar)
+  // Однако даже для simplebar поидее если что-то передавать то будет просто такой же эффект как с дефолтным скроллбаром - просто скролл будет на разеревированном дополнительном пустом месте рисоваться.
+  // Думаю можно делать дефолтную реализацию как обычный скролл с авторезервированием либо передаем скролл но тогда обязательно устанавливаем либо число либо строку 'default-scrollbar-auto-measured'
+  width -= reservedScrollbarWidth;
 
   const [totalCount, setTotalCount] = useState(0);
 
@@ -247,12 +267,12 @@ export function Main(props: MainProps) {
   }
 
   return (
-    <SimpleBar
-      scrollableNodeProps={{ ref: parentRef, style: { willChange: 'transform' } }}
-      className={cl['list-outer']}
-      style={{ maxHeight: `${maxHeight}px` }}
-    >
-      {/* <div ref={parentRef} className={cl['list-outer']} style={{ willChange: 'transform', maxHeight: `${maxHeight}px` }}> */}
+    // <SimpleBar
+    //   scrollableNodeProps={{ ref: parentRef, style: { willChange: 'transform' } }}
+    //   className={cl['list-outer']}
+    //   style={{ maxHeight: `${maxHeight}px` }}
+    // >
+      <div ref={parentRef} className={cl['list-outer']} style={{ willChange: 'transform', maxHeight: `${maxHeight}px` }}>
         <Inner
           height={rowVirtualizer.getTotalSize()}
           virtualItems={virtualItems}
@@ -262,8 +282,8 @@ export function Main(props: MainProps) {
           isLoading={isLoading}
           isAllLoaded={isAllLoaded}
         />
-      {/* </div> */}
-    </SimpleBar>
+      </div>
+    // </SimpleBar>
   );
 }
 
@@ -280,4 +300,24 @@ function checkIfFirstPhotoFitsBetter(
   const secondDistance = Math.abs(targetSquare - secondSquare);
 
   return firstDistance < secondDistance;
+}
+
+let measuredScrollbarWidth: number | undefined = undefined;
+
+function measureScrollbarWidth(): number {
+  // создадим элемент с прокруткой
+  const div = document.createElement('div');
+
+  div.style.overflowY = 'scroll';
+  div.style.width = '50px';
+  div.style.height = '50px';
+
+  // мы должны вставить элемент в документ, иначе размеры будут равны 0
+  document.body.append(div);
+
+  const scrollWidth = div.offsetWidth - div.clientWidth;
+
+  div.remove();
+
+  return scrollWidth;
 }
